@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping_app/main.dart';
 import 'package:shopping_app/widget/button_widget.dart';
 import 'package:flutter/material.dart';
@@ -18,6 +19,9 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
   @override
   Widget build(BuildContext context) =>
       Scaffold(
+        floatingActionButton: floatingBar(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         appBar: AppBar(
           title: Text(MyApp.title),
         ),
@@ -26,32 +30,38 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'Scan Result',
+                'Tap Button To Start!',
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 22,
                   color: Colors.black,
                   fontWeight: FontWeight.bold,
                 ),
               ),
               SizedBox(height: 8),
-              Text(
-                '$barcode',
-                style: TextStyle(
-                  fontSize: 28,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black,
-                ),
-              ),
-              SizedBox(height: 72),
-              ButtonWidget(
-                text: 'Start Barcode scan',
-                onClicked: scanBarcodeNormal,
-              ),
             ],
           ),
         ),
       );
 
+  Widget floatingBar() => Ink(
+      decoration: ShapeDecoration(
+        shape: StadiumBorder(),
+      ),
+    child: FloatingActionButton.extended(
+        onPressed: (){
+          scanBarcodeNormal();
+        },
+        backgroundColor: Colors.black,
+      icon: Icon(
+        FontAwesomeIcons.barcode,
+        color: Colors.pinkAccent,
+      ),
+      label: Text(
+        "SCAN",
+        style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+      ),
+    ),
+      );
 
   Future<void> scanBarcodeNormal() async {
     String barcodeScanRes;
@@ -151,8 +161,8 @@ class ScanCard extends StatelessWidget {
         Column(
           children: [
             Text(
-              "netweight- " + products['netweight'],
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+              "Size: " + products['size'],
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Colors.brown),
             ),
             SizedBox(
               width: 30,
@@ -162,7 +172,7 @@ class ScanCard extends StatelessWidget {
         Row(
           children: [
             Text(
-              "\n " + products['price'],
+              "\tRs. " + products['price'],
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(
@@ -184,12 +194,13 @@ class ScanCard extends StatelessWidget {
             child: RaisedButton(
               shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0)),
-              color: Color(0xFF3D82AE),
+              color: Color(0xFFE8284F),
               child: Text(
                 "Add to cart",
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
+                addToCartMessage(context);
               //   DocumentReference documentReference = FirebaseFirestore.instance
               //       .collection('userData')
               //       .collection('cartData')
@@ -214,4 +225,30 @@ class ScanCard extends StatelessWidget {
       ],
     );
   }
+}
+
+Future<dynamic> addToCartMessage(BuildContext context) async {
+  return showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context){
+        return AlertDialog(
+          content: Text(
+            'Added To Cart Successfully!',
+            style: TextStyle(fontSize: 20.0, color: Colors.black),
+          ),
+          actions: <Widget>[
+            FlatButton(
+                child: Text(
+                  'Alright',
+                  style: TextStyle(fontSize: 18, color: Colors.deepOrange),
+                ),
+              onPressed: (){
+                  Navigator.of(context).pop();
+              },
+            )
+          ],
+        );
+      }
+  );
 }
