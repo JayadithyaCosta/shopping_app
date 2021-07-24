@@ -11,6 +11,7 @@ void main() async {
   runApp(MyApp());
 }
 
+
 class MyApp extends StatelessWidget {
   static final String title = 'Barcode Scanner';
 
