@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shopping_app/Start.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'package:shopping_app/widget/button_widget.dart';
 
@@ -40,22 +41,33 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: AppBar(
-          title: Text(widget.title),
-        ),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ButtonWidget(
-                text: 'Scan Barcode',
-                onClicked: () => Navigator.of(context).push(MaterialPageRoute(
-                  builder: (BuildContext context) => BarcodeScanPage(),
-                )),
-              ),
-            ],
-          ),
-        ),
-      );
+  Widget build(BuildContext context) {
+    return MaterialApp(
+
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: Colors.red[400]
+      ),
+      home: Start() ,
+    );
+  }
+  // @override
+  // Widget build(BuildContext context) => Scaffold(
+  //       appBar: AppBar(
+  //         title: Text(widget.title),
+  //       ),
+  //       body: Center(
+  //         child: Column(
+  //           mainAxisAlignment: MainAxisAlignment.center,
+  //           children: [
+  //             ButtonWidget(
+  //               text: 'Scan Barcode',
+  //               onClicked: () => Navigator.of(context).push(MaterialPageRoute(
+  //                 builder: (BuildContext context) => BarcodeScanPage(),
+  //               )),
+  //             ),
+  //           ],
+  //         ),
+  //       ),
+  //     );
 }

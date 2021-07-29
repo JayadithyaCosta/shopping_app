@@ -32,6 +32,7 @@ dependencies:
   firebase:
   firebase_database:
   firebase_core:
+  firebase_auth:
   cloud_firestore:
   font_awesome_flutter:
   barcode_widget: ^1.5.0
@@ -58,8 +59,9 @@ flutter:
   uses-material-design: true
 
   # To add assets to your application, add an assets section, like this:
-#  assets:
-#     - images/icon.png
+  assets:
+     - images/splash_two.png
+     #- images/splash.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
