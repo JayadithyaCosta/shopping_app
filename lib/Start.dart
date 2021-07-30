@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_signin_button/flutter_signin_button.dart';
+import 'package:shopping_app/auth/sign_in.dart';
+import 'package:shopping_app/auth/sign_up.dart';
 
 class Start extends StatefulWidget {
-  const Start({Key? key}) : super(key: key);
-
   @override
   _StartState createState() => _StartState();
 }
 
+
+
 class _StartState extends State<Start> {
+  
+  
+
+  navigateToLogin() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
+  }
+
+  navigateToSignUp() async {
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> SignUp()));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +35,7 @@ class _StartState extends State<Start> {
 
               Container(
 
-                child: Image(image: AssetImage("images/splash_two.png"),
+                child: Image(image: NetworkImage('https://image.freepik.com/free-vector/smartphone-scanning-qr-code_23-2148627980.jpg'),
                 fit: BoxFit.contain
                 ),
               ),
@@ -44,6 +58,7 @@ class _StartState extends State<Start> {
                   ),
               ),
               SizedBox(height: 10),
+
               Text('New styles everyday!', style: TextStyle(color: Colors.black),),
 
               SizedBox(height: 50),
@@ -60,7 +75,7 @@ class _StartState extends State<Start> {
                       right: 30
                     ),
 
-                    onPressed: () {},
+                    onPressed: navigateToLogin,
                     child: Text('LOGIN', style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -82,7 +97,7 @@ class _StartState extends State<Start> {
                         right: 30
                     ),
 
-                    onPressed: () {},
+                    onPressed: navigateToSignUp,
                     child: Text('SIGN UP', style: TextStyle(
                         fontSize: 20,
                         fontWeight: FontWeight.bold,
@@ -93,9 +108,17 @@ class _StartState extends State<Start> {
                         borderRadius: BorderRadius.circular(10.0)
                     ),
                     color: Colors.cyan,
-                  )
+                  ),
                 ],
-              )
+              ),
+              SizedBox(height: 10,),
+
+              SignInButton(
+                  Buttons.Google,
+                  text: "Sign Up with google",
+                  onPressed: () {}
+              ),
+
             ],
         ),
       ),
