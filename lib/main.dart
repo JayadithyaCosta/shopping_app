@@ -50,8 +50,10 @@ class _MainPageState extends State<MainPage> {
       theme: ThemeData(
         primaryColor: Colors.red[400]
       ),
+      initialRoute: '/',
       routes: {
         '/test': (context) => Test(),
+        // '/' : (context) => HomePage()
 
       },
       home: Start() ,
