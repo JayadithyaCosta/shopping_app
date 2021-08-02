@@ -32,6 +32,7 @@ class _TestState extends State<Test> {
   Widget build(BuildContext context) {
     return Scaffold(
 
+      backgroundColor: Colors.grey,
         body: Container(
           child: Align(
             alignment: Alignment.bottomCenter,

@@ -1,8 +1,8 @@
 import 'package:firebase_core/firebase_core.dart';
-import 'package:shopping_app/Start.dart';
+import 'package:shopping_app/screens/Start.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'package:shopping_app/screens/Home.dart';
-import 'package:shopping_app/screens/Test_screes.dart';
+import 'package:shopping_app/screens/actions.dart';
 import 'package:shopping_app/widget/button_widget.dart';
 
 import 'package:flutter/material.dart';
