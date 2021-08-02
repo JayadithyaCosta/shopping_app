@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shopping_app/screens/Test_screes.dart';
 // import 'SignUp.dart';
 
 class Login extends StatefulWidget {
@@ -18,7 +19,7 @@ class _LoginState extends State<Login> {
       if (user == null) {
         print(user);
 
-        Navigator.pushReplacementNamed(context, "/");
+        //Navigator.pushReplacementNamed(context, "/");
       }
     });
   }
@@ -36,6 +37,9 @@ class _LoginState extends State<Login> {
       try {
         UserCredential user = await _auth.signInWithEmailAndPassword(
             email: _email, password: _password);
+
+        Navigator.pushReplacementNamed(context, '/test');
+
       } catch (e) {
         showError(e.toString());
         print(e);
