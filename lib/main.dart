@@ -53,6 +53,7 @@ class _MainPageState extends State<MainPage> {
       initialRoute: '/',
       routes: {
         '/test': (context) => Test(),
+        'scan': (context) => BarcodeScanPage()
         // '/' : (context) => HomePage()
 
       },

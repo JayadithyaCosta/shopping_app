@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'package:shopping_app/screens/Home.dart';
+import 'package:shopping_app/screens/Item_add.dart';
 
 
 class Test extends StatefulWidget {
@@ -39,7 +40,12 @@ class _TestState extends State<Test> {
             child: Column(
               children: <Widget> [
                 SizedBox(width: 200, height: 200,),
-                RaisedButton(child: Text('Add Item'), onPressed: () {} , shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10)), padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
+                RaisedButton(child: Text('Add Item'), onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Item()),
+                  );
+                } , shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10)), padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                 ),
                 SizedBox(width: 30, height: 30, ),
 

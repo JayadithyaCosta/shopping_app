@@ -14,12 +14,14 @@ class _LoginState extends State<Login> {
 
   late String _email, _password;
 
-  checkAuthentification() async {
+  bool isLoading = false;
+
+  checkAuthentication() async {
     _auth.authStateChanges().listen((user) {
-      if (user == null) {
+      if (user != null) {
         print(user);
 
-        //Navigator.pushReplacementNamed(context, "/");
+        Navigator.pushReplacementNamed(context, "/test");
       }
     });
   }
@@ -27,10 +29,14 @@ class _LoginState extends State<Login> {
   @override
   void initState() {
     super.initState();
-    this.checkAuthentification();
+    this.checkAuthentication();
   }
 
   login() async {
+    setState(() {
+      isLoading = true;
+    });
+
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -132,7 +138,9 @@ class _LoginState extends State<Login> {
                 GestureDetector(
                   child: Text('Create an Account?'),
                   onTap: navigateToSignUp,
-                )
+                ),
+                SizedBox(height: 10,),
+                Visibility(visible: isLoading, child: CircularProgressIndicator( strokeWidth: 6, backgroundColor: Colors.grey,))
               ],
             ),
           ),

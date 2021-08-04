@@ -10,12 +10,13 @@ class _SignUpState extends State<SignUp> {
   FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
+  bool isLoading= false;
   late String _name, _email, _password;
 
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
       if (user != null) {
-        // Navigator.pushReplacementNamed(context, "/");
+        // Navigator.pushReplacementNamed(context, "/test");
       }
     });
   }
@@ -27,6 +28,9 @@ class _SignUpState extends State<SignUp> {
   }
 
   signUp() async {
+    setState(() {
+      isLoading = true;
+    });
     if (_formKey.currentState!.validate()) {
       _formKey.currentState!.save();
 
@@ -38,7 +42,7 @@ class _SignUpState extends State<SignUp> {
           // updateuser.displayName = _name;
           //  user.updateProfile(updateuser);
           await _auth.currentUser!.updateProfile(displayName: _name);
-          // await Navigator.pushReplacementNamed(context,"/") ;
+          await Navigator.pushReplacementNamed(context,"/test") ;
 
         }
       } catch (e) {
@@ -132,7 +136,9 @@ class _SignUpState extends State<SignUp> {
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(20.0),
                           ),
-                        )
+                        ),
+                        SizedBox(height: 10,),
+                        Visibility(visible: isLoading, child: CircularProgressIndicator( strokeWidth: 6, backgroundColor: Colors.grey,))
                       ],
                     ),
                   ),
