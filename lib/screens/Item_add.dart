@@ -1,7 +1,15 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
-import 'package:shopping_app/screens/actions.dart';
+import 'dart:io';
+
+ String imageUrl= '';
+
 
 class Item extends StatelessWidget {
   @override
@@ -13,7 +21,14 @@ class Item extends StatelessWidget {
   }
 }
 
-class FirebaseAuthDemo extends StatelessWidget {
+class FirebaseAuthDemo extends StatefulWidget {
+
+  @override
+  _HomeState createState() => _HomeState();
+}
+
+class _HomeState extends State<FirebaseAuthDemo>{
+
   final TextEditingController _barcodeEditingController = TextEditingController();
   final TextEditingController _imageEditingController = TextEditingController();
   final TextEditingController _nameEditingController = TextEditingController();
@@ -21,6 +36,8 @@ class FirebaseAuthDemo extends StatelessWidget {
   final TextEditingController _sizeEditingController = TextEditingController();
 
   final CollectionReference collectionReference = FirebaseFirestore.instance.collection('products');
+
+
 
   gotoBarcodeScan(BuildContext context){
 
@@ -31,15 +48,25 @@ class FirebaseAuthDemo extends StatelessWidget {
 
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(title: Text('Upload Item')),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        child: Column(
+        child: ListView(
           children: [
+            (imageUrl != null)
+            ? Image.network(imageUrl)
+            : Placeholder(fallbackHeight: 1000.0, fallbackWidth: 500,),
+            RaisedButton(
+                child: Text('Upload Image'),
+                color: Colors.lightBlue,
+                onPressed: () => uploadImage(),
+            ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -57,17 +84,18 @@ class FirebaseAuthDemo extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 1.7,
-              child: TextFormField(
-                controller: _imageEditingController,
-                style: TextStyle(fontSize: 22, color: Colors.black),
-                decoration: InputDecoration(
-                  hintText: "Image URL",
-                  hintStyle: TextStyle(fontSize: 22, color: Colors.black),
-                ),
-              ),
-            ),
+
+            // SizedBox(
+            //   width: MediaQuery.of(context).size.width / 1.7,
+            //   child: TextFormField(
+            //     controller: _imageEditingController,
+            //     style: TextStyle(fontSize: 22, color: Colors.black),
+            //     decoration: InputDecoration(
+            //       hintText: "Image URL",
+            //       hintStyle: TextStyle(fontSize: 22, color: Colors.black),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               width: MediaQuery.of(context).size.width / 1.7,
               child: TextFormField(
@@ -109,7 +137,7 @@ class FirebaseAuthDemo extends StatelessWidget {
                   onPressed: () async {
                     await collectionReference.add({
                       'barcode': _barcodeEditingController.text,
-                      'img': _imageEditingController.text,
+                      'img': imageUrl,
                       'name': _nameEditingController.text,
                       'price': _priceEditingController.text,
                       'size': _sizeEditingController.text
@@ -128,5 +156,47 @@ class FirebaseAuthDemo extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  uploadImage() async{
+    final _storage = FirebaseStorage.instance;
+
+    final _picker = ImagePicker();
+    PickedFile image;
+
+    //Check permission
+    await Permission.photos.request();
+
+    var permissionStatus = await Permission.photos.status;
+
+    if(permissionStatus.isGranted){
+
+      //Select Image
+      image = (await _picker.getImage(source: ImageSource.gallery))!;
+      var file = File(image.path);
+
+      if(image != null){
+
+        //Upload to firebase
+        var snapshot = await _storage.ref()
+            .child('folder/ImageName')
+            .putFile(file)
+            .whenComplete(() => null);
+
+        var downloadUrl = await snapshot.ref.getDownloadURL();
+
+        setState(() {
+          imageUrl = downloadUrl;
+        });
+
+      }else{
+        print("No path received!");
+      }
+
+    }else{
+      print('Grant Permission and continue!');
+    }
+
+
   }
 }

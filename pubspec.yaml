@@ -32,6 +32,7 @@ dependencies:
   firebase:
   firebase_database:
   firebase_core:
+  firebase_storage: ^10.0.1
   firebase_auth:
   cloud_firestore:
   font_awesome_flutter:
@@ -39,6 +40,9 @@ dependencies:
 
   google_sign_in:
   flutter_signin_button:
+  image_picker:
+
+  permission_handler: ^8.1.4+2
 
 dev_dependencies:
   flutter_test:
