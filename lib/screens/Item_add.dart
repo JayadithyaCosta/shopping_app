@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'dart:io';
 
- String imageUrl= '';
+ String imageUrl= 'https://thumb1.shutterstock.com/mosaic_250/4476580/1837517026/stock-vector-shop-purchase-delivery-linear-design-open-order-package-wholesale-products-receive-postal-1837517026.jpg';
 
 
 class Item extends StatelessWidget {
@@ -30,7 +30,6 @@ class FirebaseAuthDemo extends StatefulWidget {
 class _HomeState extends State<FirebaseAuthDemo>{
 
   final TextEditingController _barcodeEditingController = TextEditingController();
-  final TextEditingController _imageEditingController = TextEditingController();
   final TextEditingController _nameEditingController = TextEditingController();
   final TextEditingController _priceEditingController = TextEditingController();
   final TextEditingController _sizeEditingController = TextEditingController();
@@ -62,10 +61,16 @@ class _HomeState extends State<FirebaseAuthDemo>{
             (imageUrl != null)
             ? Image.network(imageUrl)
             : Placeholder(fallbackHeight: 1000.0, fallbackWidth: 500,),
-            RaisedButton(
-                child: Text('Upload Image'),
-                color: Colors.lightBlue,
-                onPressed: () => uploadImage(),
+            ButtonTheme(
+              minWidth: 200,
+              height: 10,
+                child: RaisedButton(
+                  child: Text('Upload'),
+                  color: Colors.lightBlue,
+
+                  onPressed: () => showAlertDialog(context),
+                ),
+
             ),
             Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -158,11 +163,45 @@ class _HomeState extends State<FirebaseAuthDemo>{
     );
   }
 
+  //Camera snap
+  Future snapImage() async{
+
+    final _storage = FirebaseStorage.instance;
+
+    final _picker = ImagePicker();
+    PickedFile cameraImage;
+
+    final pickedFile = await _picker.getImage(source: ImageSource.camera);
+
+    var file = File(pickedFile!.path);
+
+    if(pickedFile != null){
+
+      //Upload to firebase
+      var snapshot = await _storage.ref()
+          .child('folder/ImageName')
+          .putFile(file)
+          .whenComplete(() => null);
+
+      var downloadUrl = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        imageUrl = downloadUrl;
+      });
+
+    }else{
+      print("No path received!");
+    }
+  }
+
+  // Gallery
   uploadImage() async{
     final _storage = FirebaseStorage.instance;
 
     final _picker = ImagePicker();
     PickedFile image;
+
+    
 
     //Check permission
     await Permission.photos.request();
@@ -198,5 +237,36 @@ class _HomeState extends State<FirebaseAuthDemo>{
     }
 
 
+  }
+
+  showAlertDialog(BuildContext context) {
+
+    // set up the buttons
+    Widget remindButton = TextButton(
+      child: Text("Camera"),
+      onPressed:  () => snapImage(),
+    );
+    Widget cancelButton = TextButton(
+      child: Text("Gallery"),
+      onPressed:  () => uploadImage(),
+    );
+
+    // set up the AlertDialog
+    AlertDialog alert = AlertDialog(
+      title: Image.network("https://cdn4.iconfinder.com/data/icons/ionicons/512/icon-camera-512.png", width: 150, height: 150, fit: BoxFit.contain,),
+      actions: [
+
+        remindButton,
+        cancelButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
   }
 }

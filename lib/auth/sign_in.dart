@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
       if (user != null) {
         print(user);
 
-        Navigator.pushReplacementNamed(context, "/test");
+        //Navigator.pushReplacementNamed(context, "/test");
       }
     });
   }
@@ -47,6 +47,9 @@ class _LoginState extends State<Login> {
         Navigator.pushReplacementNamed(context, '/test');
 
       } catch (e) {
+        setState(() {
+          isLoading = false;
+        });
         showError(e.toString());
         print(e);
       }
@@ -96,7 +99,13 @@ class _LoginState extends State<Login> {
                         Container(
                           child: TextFormField(
                               validator: (input) {
-                                if (input!.isEmpty) return 'Enter Email';
+                                if (input!.isEmpty) {
+
+                                  setState(() {
+                                    isLoading= false;
+                                  });
+                                  return 'Enter Email';
+                                }
                               },
                               decoration: InputDecoration(
                                   labelText: 'Email',
