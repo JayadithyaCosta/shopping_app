@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'dart:io';
 
- String imageUrl= 'https://thumb1.shutterstock.com/mosaic_250/4476580/1837517026/stock-vector-shop-purchase-delivery-linear-design-open-order-package-wholesale-products-receive-postal-1837517026.jpg';
+ String imageUrl= '';
 
 
 class Item extends StatelessWidget {
@@ -51,7 +51,7 @@ class _HomeState extends State<FirebaseAuthDemo>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Upload Item')),
+      appBar: AppBar(title: Text('Upload Item'), backgroundColor: Colors.redAccent,),
       body: Container(
         padding: EdgeInsets.symmetric(horizontal: 10, vertical: 50),
         height: MediaQuery.of(context).size.height,
@@ -177,9 +177,10 @@ class _HomeState extends State<FirebaseAuthDemo>{
 
     if(pickedFile != null){
 
+      DateTime currentDate = new DateTime.now();
       //Upload to firebase
       var snapshot = await _storage.ref()
-          .child('folder/ImageName')
+          .child('/added_images/$currentDate')
           .putFile(file)
           .whenComplete(() => null);
 
@@ -216,9 +217,12 @@ class _HomeState extends State<FirebaseAuthDemo>{
 
       if(image != null){
 
+        DateTime currentdate = new DateTime.now();
+
+
         //Upload to firebase
         var snapshot = await _storage.ref()
-            .child('folder/ImageName')
+            .child('/added_images/$currentdate')
             .putFile(file)
             .whenComplete(() => null);
 

@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase/firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopping_app/auth/sign_in.dart';
@@ -68,27 +71,30 @@ class _TestState extends State<Test> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                image: DecorationImage(image: NetworkImage('https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),fit: BoxFit.cover )
+                  image: DecorationImage(image: NetworkImage(
+                      'https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),
+                      fit: BoxFit.cover)
               ),
               child: Text(''),
             ),
             ListTile(
-              title: const Text('Add Item'),
-              leading: Icon(Icons.input),
-              onTap: () {
-                if(user!.email == "admin@gmail.com"){
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Item()),
-              );
-          }
-              else{
-                  const snackBar = SnackBar(content: Text('Only Admin can access adding items!'));
+                title: const Text('Add Item'),
+                leading: Icon(Icons.input),
+                onTap: () {
+                  if (user!.email == "admin@gmail.com") {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Item()),
+                    );
+                  }
+                  else {
+                    const snackBar = SnackBar(
+                        content: Text('Only Admins can access adding items!'));
 
-                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
-                  Navigator.pop(context);
-              }
-              }
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    Navigator.pop(context);
+                  }
+                }
 
             ),
             ListTile(
@@ -115,69 +121,174 @@ class _TestState extends State<Test> {
                 Navigator.pushNamed(context, '/');
               },
             )
-              ],
+          ],
         ),
 
       ),
 
-      backgroundColor: Colors.grey,
-        body: Container(
-          child: Align(
-            alignment: Alignment.bottomCenter,
-            child: Column(
-              children: <Widget> [
-                SizedBox(width: 200, height: 200,),
-                RaisedButton(child: Text('Add Item'), onPressed: () {
+    body: SingleChildScrollView(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+            SizedBox(
+              height: 30,
+          ),
 
-                  if(user!.email == "admin@gmail.com"){
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Item()),
-                    );
-                  }
-                  else{
-                    Text("Hello User!");
-                  }
-
-                } , shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10)), padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                ),
-                SizedBox(width: 30, height: 30, ),
-
-                RaisedButton(child: Text('Scan Item'),
-                    padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                    onPressed: () {
-                      Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => BarcodeScanPage()),
-                  );
-
-                  padding: EdgeInsets.only(left: 50, right: 50, top: 50);
-                } , shape: RoundedRectangleBorder( borderRadius: BorderRadius.circular(10))),
-
-                SizedBox(width: 100, height: 100,),
-
-                RaisedButton(
-
-                  padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
-                  onPressed: () {
-                    logOut;
-                    Navigator.pushNamed(context, '/');
-                  },
-                  child: Text('Sign Out',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold)),
-                  color: Colors.redAccent,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                  ),
-                )
-              ],
-            ),
-
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+            child: Text(
+              'Clothes',
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, fontFamily: 'STIX Two Text'),
           ),
         ),
+        buildStreamClothes()
+        ],
+      ),
+
+      //     backgroundColor: Colors.grey,
+      //       body: Scaffold(
+      //         floatingActionButton: null,
+      //         body: StreamBuilder(
+      //           stream: FirebaseFirestore.instance.collection("products").snapshots(),
+      //           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+      //             if (!snapshot.hasData) {
+      //               return Center(
+      //                 child: CircularProgressIndicator(),
+      //               );
+      //             }
+      //             return ListView(
+      //                 children: snapshot.data.docs.map((document) {
+      //                   var url = document['img'];
+      //                 }
+      //                 ));
+      //           }
+      //           ),
+      //   ));
+    )
+    );
+  }
+
+
+
+  StreamBuilder<QuerySnapshot> buildStreamClothes() {
+    return StreamBuilder(
+        stream: FirebaseFirestore.instance
+            .collection("products")
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.data == null)
+            return Text(
+              'Scan Barcode',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            );
+          return Container(
+              height: 700,
+              child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  itemCount: snapshot.data!.docs.length,
+                  itemBuilder: (context, index) {
+                    DocumentSnapshot products = snapshot.data!.docs[index];
+                    return ItemCard(products: products);
+                  },
+                  separatorBuilder: (BuildContext context, int index) {
+                    return SizedBox(width: 150);
+                  }));
+          // ));
+        });
+  }
+
+
+}
+
+
+class ItemCard extends StatelessWidget {
+  const ItemCard({
+     Key? key,
+    required this.products,
+  }) : super(key: key);
+
+  final DocumentSnapshot products;
+
+  @override
+  Widget build(BuildContext context) {
+    String _userId;
+
+    // FirebaseAuth.instance.currentUser!.then((user) {
+    //   _userId = user.uid;
+    // });
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        SizedBox(height: 20,),
+        Container(
+          padding: EdgeInsets.all(20.0),
+          height: 200,
+          width: 250,
+          decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: BorderRadius.circular(10)),
+          child: Image.network(products['img']),
+        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 20.0 / 4),
+          child: Text(
+            products['name'],
+            style: TextStyle(
+              color: Colors.black,
+            ),
+          ),
+        ),
+        Padding(padding: const EdgeInsets.symmetric(vertical: 20.0/4),
+            child: Text(
+          "\t\Rs. " + products['price'],
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        // Row(
+        //   mainAxisAlignment: MainAxisAlignment.center,
+        //   children: [
+        //     Text(
+        //       "\t\Rs. " + products['price'],
+        //       style: TextStyle(fontWeight: FontWeight.bold),
+        //     ),
+        //     SizedBox(
+        //       width: 60,
+        //     ),
+        //     GestureDetector(
+        //       child: Icon(
+        //         CupertinoIcons.cart_fill_badge_plus,
+        //         color: Colors.black,
+        //         size: 30,
+        //       ),
+        //       onTap: () {
+        //         DocumentReference documentReference = FirebaseFirestore.instance
+        //             .collection('product')
+        //             .doc();
+        //         documentReference
+        //             .set({
+        //           'barcode': products['barcode'],
+        //           'img': products['img'],
+        //           'name': products['name'],
+        //           'netweight': products['netweight'],
+        //           'price': products['price'],
+        //         })
+        //             .then((result) {})
+        //             .catchError((e) {
+        //           print(e);
+        //         });
+        //         Scaffold.of(context).showSnackBar(new SnackBar(
+        //           content: new Text(
+        //             'Added to Cart',
+        //             style: TextStyle(color: Colors.white, fontSize: 18),
+        //             textAlign: TextAlign.start,
+        //           ),
+        //           duration: Duration(milliseconds: 300),
+        //           backgroundColor: Color(0xFF3D82AE),
+        //         ));
+        //       },
+        //     ),
+        //   ],
+        // )
+        )],
     );
   }
 }
