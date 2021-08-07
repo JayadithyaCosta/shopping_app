@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,7 @@ class BarcodeScanPage extends StatefulWidget {
 
 class _BarcodeScanPageState extends State<BarcodeScanPage> {
   String barcode = 'Unknown';
+
 
   @override
   Widget build(BuildContext context) =>
@@ -133,8 +135,13 @@ class ScanCard extends StatelessWidget {
   }) : super(key: key);
   final DocumentSnapshot products;
 
+
   @override
   Widget build(BuildContext context) {
+
+
+    //final FirebaseAuth _userId = FirebaseAuth.instance.currentUser!.uid;
+
 
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -176,12 +183,12 @@ class ScanCard extends StatelessWidget {
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
             SizedBox(
-              width: 60,
+              width: 40,
             ),
             Icon(
               Icons.add_shopping_cart,
               color: Colors.black,
-              size: 27,
+              size: 25,
             ),
           ],
         ),
@@ -200,24 +207,22 @@ class ScanCard extends StatelessWidget {
                 style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
-                addToCartMessage(context);
-              //   DocumentReference documentReference = FirebaseFirestore.instance
-              //       .collection('userData')
-              //       .collection('cartData')
-              //       .document();
-              //   documentReference.setData({
-              //     'uid': _userId,
-              //     'barcode': products['barcode'],
-              //     'img': products['img'],
-              //     'name': products['name'],
-              //     'netweight': products['netweight'],
-              //     'price': products['price'],
-              //     'id': documentReference.documentID
-              //   }).then((result) {
-              //     dialogTrigger(context);
-              //   }).catchError((e) {
-              //     print(e);
-              //   });
+                DocumentReference documentReference = FirebaseFirestore.instance
+                    .collection('cart')
+                    .doc();
+                documentReference.set({
+                  'uid': FirebaseAuth.instance.currentUser!.uid,
+                  'barcode': products['barcode'],
+                  'img': products['img'],
+                  'name': products['name'],
+                  'size': products['size'],
+                  'price': products['price'],
+                  'id': documentReference.id
+                }).then((result) {
+                  addToCartMessage(context);
+                }).catchError((e) {
+                  print(e);
+                });
                },
             ),
           ),
