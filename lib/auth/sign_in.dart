@@ -21,7 +21,7 @@ class _LoginState extends State<Login> {
       if (user != null) {
         print(user);
 
-        //Navigator.pushReplacementNamed(context, "/test");
+        Navigator.pushReplacementNamed(context, "/test");
       }
     });
   }

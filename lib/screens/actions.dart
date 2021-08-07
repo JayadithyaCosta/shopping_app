@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:shopping_app/auth/sign_in.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'package:shopping_app/screens/Home.dart';
 import 'package:shopping_app/screens/Item_add.dart';
@@ -16,10 +17,14 @@ class Test extends StatefulWidget {
 //   Navigator.push(MaterialPageRoute(builder: (context)=> BarcodeScanPage()));
 // }
 
-logOut() async{
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  await auth.signOut();
+// logOut() async{
+//   final FirebaseAuth auth = FirebaseAuth.instance;
+//   await auth.signOut();
+//
+// }
 
+Future<void> logOut() async {
+  await FirebaseAuth.instance.signOut();
 }
 
 
@@ -30,6 +35,24 @@ logOut() async{
 class _TestState extends State<Test> {
 
   final user = FirebaseAuth.instance.currentUser;
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
+
+
+  // checkAuthentication() async {
+  //   _auth.authStateChanges().listen((user) {
+  //     if (user != null) {
+  //       print(user);
+  //
+  //       Navigator.pushReplacementNamed(context, "/");
+  //     }
+  //   });
+  // }
+  //
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   this.checkAuthentication();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -45,12 +68,13 @@ class _TestState extends State<Test> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                color: Colors.redAccent,
+                image: DecorationImage(image: NetworkImage('https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),fit: BoxFit.cover )
               ),
-              child: Text('Drawer Header'),
+              child: Text(''),
             ),
             ListTile(
               title: const Text('Add Item'),
+              leading: Icon(Icons.input),
               onTap: () {
                 if(user!.email == "admin@gmail.com"){
                       Navigator.push(
@@ -68,6 +92,7 @@ class _TestState extends State<Test> {
 
             ),
             ListTile(
+              leading: Icon(Icons.scanner),
               title: const Text('Scan Item'),
               onTap: () {
                 Navigator.push(
@@ -75,8 +100,24 @@ class _TestState extends State<Test> {
                     MaterialPageRoute(builder: (context) => BarcodeScanPage()));
               },
             ),
-          ],
+            Divider(),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: const Text('Settings'),
+              onTap: () {},
+            ),
+            ListTile(
+              leading: Icon(Icons.logout),
+              title: const Text('Log Out'),
+              onTap: () {
+                logOut();
+                Navigator.of(context).pop();
+                Navigator.pushNamed(context, '/');
+              },
+            )
+              ],
         ),
+
       ),
 
       backgroundColor: Colors.grey,
