@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:shopping_app/screens/Cart.dart';
 import 'package:shopping_app/screens/Start.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'package:shopping_app/screens/Home.dart';
@@ -53,7 +54,8 @@ class _MainPageState extends State<MainPage> {
       initialRoute: '/',
       routes: {
         '/test': (context) => Test(),
-        'scan': (context) => BarcodeScanPage()
+        'scan': (context) => BarcodeScanPage(),
+        'cart': (context) => Cart()
         // '/' : (context) => HomePage()
 
       },

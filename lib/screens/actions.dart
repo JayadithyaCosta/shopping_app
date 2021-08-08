@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shopping_app/auth/sign_in.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
+import 'package:shopping_app/screens/Cart.dart';
 import 'package:shopping_app/screens/Home.dart';
 import 'package:shopping_app/screens/Item_add.dart';
 
@@ -60,7 +61,22 @@ class _TestState extends State<Test> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Home'),),
+      appBar: AppBar(
+        title:(
+            Align(
+              alignment: Alignment.topLeft,
+              child: Text('Home'),
+            )
+        ),
+        actions:<Widget> [
+          IconButton(
+              icon: Icon(Icons.shopping_cart), color: Colors.white,
+              onPressed:() {
+                Navigator.pushReplacementNamed(context, "cart");
+              }
+          )
+        ],
+      ),
       drawer: Drawer(
         // Add a ListView to the drawer. This ensures the user can scroll
         // through the options in the drawer if there isn't enough vertical
@@ -211,22 +227,19 @@ class ItemCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String _userId;
+    //String _userId;
 
-    // FirebaseAuth.instance.currentUser!.then((user) {
-    //   _userId = user.uid;
-    // });
+    final String _userId = FirebaseAuth.instance.currentUser!.uid;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        SizedBox(height: 20,),
         Container(
           padding: EdgeInsets.all(20.0),
-          height: 200,
-          width: 250,
+          height: 180,
+          width: 300,
           decoration: BoxDecoration(
               color: Colors.grey,
-              borderRadius: BorderRadius.circular(10)),
+              borderRadius: BorderRadius.circular(12)),
           child: Image.network(products['img']),
         ),
         Padding(
@@ -235,60 +248,59 @@ class ItemCard extends StatelessWidget {
             products['name'],
             style: TextStyle(
               color: Colors.black,
+              fontWeight: FontWeight.bold
             ),
           ),
         ),
-        Padding(padding: const EdgeInsets.symmetric(vertical: 20.0/4),
-            child: Text(
-          "\t\Rs. " + products['price'],
-          style: TextStyle(fontWeight: FontWeight.bold),
-        ),
-        // Row(
-        //   mainAxisAlignment: MainAxisAlignment.center,
-        //   children: [
-        //     Text(
-        //       "\t\Rs. " + products['price'],
-        //       style: TextStyle(fontWeight: FontWeight.bold),
-        //     ),
-        //     SizedBox(
-        //       width: 60,
-        //     ),
-        //     GestureDetector(
-        //       child: Icon(
-        //         CupertinoIcons.cart_fill_badge_plus,
-        //         color: Colors.black,
-        //         size: 30,
-        //       ),
-        //       onTap: () {
-        //         DocumentReference documentReference = FirebaseFirestore.instance
-        //             .collection('product')
-        //             .doc();
-        //         documentReference
-        //             .set({
-        //           'barcode': products['barcode'],
-        //           'img': products['img'],
-        //           'name': products['name'],
-        //           'netweight': products['netweight'],
-        //           'price': products['price'],
-        //         })
-        //             .then((result) {})
-        //             .catchError((e) {
-        //           print(e);
-        //         });
-        //         Scaffold.of(context).showSnackBar(new SnackBar(
-        //           content: new Text(
-        //             'Added to Cart',
-        //             style: TextStyle(color: Colors.white, fontSize: 18),
-        //             textAlign: TextAlign.start,
-        //           ),
-        //           duration: Duration(milliseconds: 300),
-        //           backgroundColor: Color(0xFF3D82AE),
-        //         ));
-        //       },
-        //     ),
-        //   ],
-        // )
-        )],
+        Row(
+          children: [
+            Text(
+              "\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\t\Rs. " + products['price'],
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            SizedBox(
+              width: 30,
+            ),
+            GestureDetector(
+              child: Icon(
+                CupertinoIcons.cart_fill_badge_plus,
+                color: Colors.black,
+                size: 30,
+              ),
+              onTap: () {
+                DocumentReference documentReference = FirebaseFirestore.instance
+                    .collection('userData')
+                    .doc(_userId)
+                    .collection('cartData')
+                    .doc();
+                documentReference
+                    .set({
+                  'uid': _userId,
+                  'barcode': products['barcode'],
+                  'img': products['img'],
+                  'name': products['name'],
+                  'size': products['size'],
+                  'price': products['price'],
+                  'id': documentReference.id
+                })
+                    .then((result) {})
+                    .catchError((e) {
+                  print(e);
+                });
+                Scaffold.of(context).showSnackBar(new SnackBar(
+                  content: new Text(
+                    'Added to Cart',
+                    style: TextStyle(color: Colors.white, fontSize: 18),
+                    textAlign: TextAlign.start,
+                  ),
+                  duration: Duration(milliseconds: 300),
+                  backgroundColor: Color(0xFF3D82AE),
+                ));
+              },
+            ),
+          ],
+        )
+      ],
     );
   }
 }
