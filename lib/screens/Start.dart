@@ -35,7 +35,7 @@ class _StartState extends State<Start> {
 
               Container(
 
-                child: Image(image: NetworkImage('https://image.freepik.com/free-vector/smartphone-scanning-qr-code_23-2148627980.jpg'),
+                child: Image(image: AssetImage('images/scan_logojpg.jpg'),
                 fit: BoxFit.contain
                 ),
               ),

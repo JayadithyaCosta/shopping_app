@@ -87,7 +87,7 @@ class _LoginState extends State<Login> {
               children: <Widget>[
                 Container(
                   height: 400,
-                  child: Image(image: NetworkImage('https://image.freepik.com/free-vector/sign-concept-illustration_114360-125.jpg'),
+                  child: Image(image: AssetImage('images/yellow_login.jpg'),
                     fit: BoxFit.contain,
                   ),
                 ),

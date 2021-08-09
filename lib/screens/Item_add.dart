@@ -8,7 +8,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'dart:io';
 
- String imageUrl= '';
+ String imageUrl= 'https://previews.123rf.com/images/bsd555/bsd5551808/bsd555180800806/119694111-select-items-concept-icon-choosing-goods-or-services-idea-thin-line-illustration-parcel-tracking-vec.jpg';
 
 
 class Item extends StatelessWidget {
@@ -46,7 +46,12 @@ class _HomeState extends State<FirebaseAuthDemo>{
     );
 
   }
+@override
+  void initState() {
+    super.initState();
 
+    imageUrl = 'https://previews.123rf.com/images/bsd555/bsd5551808/bsd555180800806/119694111-select-items-concept-icon-choosing-goods-or-services-idea-thin-line-illustration-parcel-tracking-vec.jpg';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,10 +69,10 @@ class _HomeState extends State<FirebaseAuthDemo>{
             ButtonTheme(
               minWidth: 200,
               height: 10,
-                child: RaisedButton(
-                  child: Text('Upload'),
+                child: IconButton(
                   color: Colors.lightBlue,
-
+                  icon: const Icon(Icons.upload_file),
+                  iconSize: 30,
                   onPressed: () => showAlertDialog(context),
                 ),
 

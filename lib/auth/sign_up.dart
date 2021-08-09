@@ -80,7 +80,7 @@ class _SignUpState extends State<SignUp> {
                 Container(
                   height: 400,
                   child: Image(
-                    image: NetworkImage("https://image.freepik.com/free-vector/secure-login-concept-illustration_114360-4685.jpg"),
+                    image: AssetImage('images/red_signup.jpg'),
                     fit: BoxFit.contain,
                   ),
                 ),

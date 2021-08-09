@@ -90,8 +90,7 @@ class _TestState extends State<Test> {
           children: [
             const DrawerHeader(
               decoration: BoxDecoration(
-                  image: DecorationImage(image: NetworkImage(
-                      'https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),
+                  image: DecorationImage(image: AssetImage('images/header.png'),
                       fit: BoxFit.cover)
               ),
               child: Text(''),
