@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -7,6 +8,8 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
 import 'dart:io';
+
+import 'package:shopping_app/screens/Home.dart';
 
  String imageUrl= 'https://previews.123rf.com/images/bsd555/bsd5551808/bsd555180800806/119694111-select-items-concept-icon-choosing-goods-or-services-idea-thin-line-illustration-parcel-tracking-vec.jpg';
 
@@ -73,7 +76,9 @@ class _HomeState extends State<FirebaseAuthDemo>{
                   color: Colors.lightBlue,
                   icon: const Icon(Icons.upload_file),
                   iconSize: 30,
-                  onPressed: () => showAlertDialog(context),
+                  onPressed: () => {
+                    showAlertDialog(context),
+                  },
                 ),
 
             ),
@@ -248,16 +253,22 @@ class _HomeState extends State<FirebaseAuthDemo>{
 
   }
 
+  late Timer _timer;
+
   showAlertDialog(BuildContext context) {
 
     // set up the buttons
     Widget remindButton = TextButton(
       child: Text("Camera"),
-      onPressed:  () => snapImage(),
+      onPressed:  () => {
+        snapImage()
+      }
     );
     Widget cancelButton = TextButton(
       child: Text("Gallery"),
-      onPressed:  () => uploadImage(),
+      onPressed:  () =>{
+        uploadImage(),
+      },
     );
 
     // set up the AlertDialog
@@ -267,6 +278,7 @@ class _HomeState extends State<FirebaseAuthDemo>{
 
         remindButton,
         cancelButton,
+
       ],
     );
 
@@ -274,8 +286,16 @@ class _HomeState extends State<FirebaseAuthDemo>{
     showDialog(
       context: context,
       builder: (BuildContext context) {
+        _timer = Timer(Duration(seconds: 5), () {
+          Navigator.of(context).pop();
+        });
         return alert;
+
       },
-    );
+    ).then((value) => {
+    if (_timer.isActive) {
+        _timer.cancel()
+  }
+    });
   }
 }

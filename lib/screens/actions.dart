@@ -39,15 +39,15 @@ Future<void> logOut() async {
 class _TestState extends State<Test> {
 
   final user = FirebaseAuth.instance.currentUser;
-  //final FirebaseAuth _auth = FirebaseAuth.instance;
-
-
+  // final FirebaseAuth _auth = FirebaseAuth.instance;
+  //
+  //
   // checkAuthentication() async {
   //   _auth.authStateChanges().listen((user) {
   //     if (user != null) {
   //       print(user);
   //
-  //       Navigator.pushReplacementNamed(context, "/");
+  //       Navigator.push(context, MaterialPageRoute(builder: (context)=> Login()));
   //     }
   //   });
   // }
@@ -105,6 +105,21 @@ class _TestState extends State<Test> {
                       MaterialPageRoute(builder: (context) => Item()),
                     );
                   }
+                  else if(user!.email == "nalin.wijemanne@gmail.com"){
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Item()),
+                    );
+                  }
+                  else if(user!.email == "domain@gmail.com"){
+
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Item()),
+                    );
+                  }
+
                   else {
                     const snackBar = SnackBar(
                         content: Text('Only Admins can access adding items!'));
