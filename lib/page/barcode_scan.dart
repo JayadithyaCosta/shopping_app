@@ -4,6 +4,9 @@ import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping_app/main.dart';
+import 'package:shopping_app/screens/Cart.dart';
+import 'package:shopping_app/screens/Item_add.dart';
+import 'package:shopping_app/screens/actions.dart';
 import 'package:shopping_app/widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -16,6 +19,11 @@ class BarcodeScanPage extends StatefulWidget {
 
 class _BarcodeScanPageState extends State<BarcodeScanPage> {
   String barcode = 'Unknown';
+  final user = FirebaseAuth.instance.currentUser;
+
+  Future<void> logOut() async {
+    await FirebaseAuth.instance.signOut();
+  }
 
 
   @override
@@ -26,6 +34,75 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
         floatingActionButtonAnimator: FloatingActionButtonAnimator.scaling,
         appBar: AppBar(
           title: Text(MyApp.title),
+        ),
+        drawer: Drawer(
+          child: ListView(
+            // Important: Remove any padding from the ListView.
+            padding: EdgeInsets.zero,
+            children: [
+              const DrawerHeader(
+                decoration: BoxDecoration(
+                    image: DecorationImage(image: NetworkImage(
+                        'https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),
+                        fit: BoxFit.cover)
+                ),
+                child: Text(''),
+              ),
+              ListTile(
+                leading: Icon(Icons.home_filled),
+                title: const Text('Home'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Test()));
+                },
+              ),
+              ListTile(
+                  title: const Text('Add Item'),
+                  leading: Icon(Icons.input),
+                  onTap: () {
+                    if (user!.email == "admin@gmail.com") {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Item()),
+                      );
+                    }
+                    else {
+                      const snackBar = SnackBar(
+                          content: Text('Only Admins can access adding items!'));
+
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      Navigator.pop(context);
+                    }
+                  }
+
+              ),
+              ListTile(
+                leading: Icon(Icons.shopping_cart),
+                title: const Text('Your Shopping Cart'),
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => Cart()));
+                },
+              ),
+              Divider(),
+              ListTile(
+                leading: Icon(Icons.settings),
+                title: const Text('Settings'),
+                onTap: () {},
+              ),
+              ListTile(
+                leading: Icon(Icons.logout),
+                title: const Text('Log Out'),
+                onTap: () {
+                  logOut();
+                  Navigator.of(context).pop();
+                  Navigator.pushNamed(context, '/');
+                },
+              ),
+            ],
+          ),
         ),
         body: Center(
           child: Column(
@@ -140,7 +217,14 @@ class ScanCard extends StatelessWidget {
   Widget build(BuildContext context) {
 
 
-    //final FirebaseAuth _userId = FirebaseAuth.instance.currentUser!.uid;
+
+    final user = FirebaseAuth.instance.currentUser;
+    String _userId = user!.uid;
+
+
+    // FirebaseAuth.instance.currentUser().then((user) {
+    //   _userId = user.uid;
+    // });
 
 
     return Column(
@@ -208,7 +292,9 @@ class ScanCard extends StatelessWidget {
               ),
               onPressed: () {
                 DocumentReference documentReference = FirebaseFirestore.instance
-                    .collection('cart')
+                    .collection('userData')
+                    .doc(_userId)
+                    .collection('cartData')
                     .doc();
                 documentReference.set({
                   'uid': FirebaseAuth.instance.currentUser!.uid,
@@ -245,12 +331,28 @@ Future<dynamic> addToCartMessage(BuildContext context) async {
           actions: <Widget>[
             FlatButton(
                 child: Text(
-                  'Alright',
-                  style: TextStyle(fontSize: 18, color: Colors.deepOrange),
+                  'Close',
+                  style: TextStyle(fontSize: 18, color: Colors.red),
                 ),
               onPressed: (){
-                  Navigator.of(context).pop();
-              },
+
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => BarcodeScanPage()),
+                );
+                },
+            ),
+            FlatButton(
+              child: Text(
+                'OK',
+                style: TextStyle(fontSize: 18, color: Colors.deepOrange),
+              ),
+              onPressed: (){
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart()),
+                );
+                  },
             )
           ],
         );

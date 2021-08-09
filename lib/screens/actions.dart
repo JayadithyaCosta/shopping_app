@@ -72,7 +72,10 @@ class _TestState extends State<Test> {
           IconButton(
               icon: Icon(Icons.shopping_cart), color: Colors.white,
               onPressed:() {
-                Navigator.pushReplacementNamed(context, "cart");
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Cart()),
+                );
               }
           )
         ],
@@ -120,6 +123,15 @@ class _TestState extends State<Test> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => BarcodeScanPage()));
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.shopping_cart),
+              title: const Text('Your Shopping Cart'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => Cart()));
               },
             ),
             Divider(),
@@ -198,7 +210,7 @@ class _TestState extends State<Test> {
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             );
           return Container(
-              height: 700,
+              height: 650,
               child: ListView.separated(
                   scrollDirection: Axis.vertical,
                   itemCount: snapshot.data!.docs.length,
