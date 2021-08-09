@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shopping_app/auth/sign_up.dart';
 import 'package:shopping_app/screens/actions.dart';
 // import 'SignUp.dart';
 
@@ -75,7 +76,7 @@ class _LoginState extends State<Login> {
   }
 
   navigateToSignUp() async {
-    //Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => SignUp()));
   }
 
   @override

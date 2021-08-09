@@ -150,14 +150,14 @@ class _CartState extends State<Cart> {
                                       Scaffold.of(context)
                                           .showSnackBar(new SnackBar(
                                         content: new Text(
-                                          'Deleted',
+                                          'Deleted!',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 20),
-                                          textAlign: TextAlign.start,
+                                          textAlign: TextAlign.center,
                                         ),
                                         duration: Duration(milliseconds: 500),
-                                        backgroundColor: Colors.pinkAccent,
+                                        backgroundColor: Colors.deepOrangeAccent,
                                       ));
                                     },
                                   )

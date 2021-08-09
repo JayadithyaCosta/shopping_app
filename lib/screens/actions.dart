@@ -319,8 +319,8 @@ class ItemCard extends StatelessWidget {
                     style: TextStyle(color: Colors.white, fontSize: 18),
                     textAlign: TextAlign.start,
                   ),
-                  duration: Duration(milliseconds: 300),
-                  backgroundColor: Color(0xFF3D82AE),
+                  duration: Duration(milliseconds: 400),
+                  backgroundColor: Colors.brown,
                 ));
               },
             ),

@@ -127,14 +127,14 @@ class _SignUpState extends State<SignUp> {
                         RaisedButton(
                           padding: EdgeInsets.fromLTRB(70, 10, 70, 10),
                           onPressed: signUp,
-                          child: Text('SignUp',
+                          child: Text('Sign Up',
                               style: TextStyle(
                                   color: Colors.white,
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold)),
-                          color: Colors.orange,
+                          color: Colors.red,
                           shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
+                            borderRadius: BorderRadius.circular(15.0),
                           ),
                         ),
                         SizedBox(height: 10,),
