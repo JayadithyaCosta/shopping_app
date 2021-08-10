@@ -4,6 +4,8 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shopping_app/page/barcode_scan.dart';
@@ -32,13 +34,13 @@ class FirebaseAuthDemo extends StatefulWidget {
 
 class _HomeState extends State<FirebaseAuthDemo>{
 
-  final TextEditingController _barcodeEditingController = TextEditingController();
+  TextEditingController _barcodeEditingController = TextEditingController();
   final TextEditingController _nameEditingController = TextEditingController();
   final TextEditingController _priceEditingController = TextEditingController();
   final TextEditingController _sizeEditingController = TextEditingController();
 
   final CollectionReference collectionReference = FirebaseFirestore.instance.collection('products');
-
+  String itemCode= '0000';
 
 
   gotoBarcodeScan(BuildContext context){
@@ -92,11 +94,33 @@ class _HomeState extends State<FirebaseAuthDemo>{
                     controller: _barcodeEditingController,
                     style: TextStyle(fontSize: 22, color: Colors.black),
                     decoration: InputDecoration(
-                      hintText: "Item Code",
-                      hintStyle: TextStyle(fontSize: 22, color: Colors.black),
+                      hintText: "$itemCode"
+                      // hintStyle: TextStyle(fontSize: 22, color: Colors.black),
+                      // icon: IconButton(
+                      //   onPressed: () {
+                      //
+                      //     scanBarcode();
+                      //     itemCode= _barcodeEditingController.text;
+                      //   },
+                      //   icon: Icon(Icons.qr_code_scanner_sharp),
+                      // ),
                     ),
                   ),
                 ),
+                Container(
+                  width: 80,
+                  height: 30,
+                  child: RaisedButton(
+                    child: Text('SCAN', style: TextStyle( fontWeight: FontWeight.bold),),
+                    onPressed: (){
+                      setState(() {
+                        scanBarcode();
+                        print(itemCode);
+                        itemCode = _barcodeEditingController.text;
+                      });
+                    },
+                ),
+                )
               ],
             ),
 
@@ -151,7 +175,7 @@ class _HomeState extends State<FirebaseAuthDemo>{
               child: ElevatedButton(
                   onPressed: () async {
                     await collectionReference.add({
-                      'barcode': _barcodeEditingController.text,
+                      'barcode': itemCode,
                       'img': imageUrl,
                       'name': _nameEditingController.text,
                       'price': _priceEditingController.text,
@@ -298,4 +322,30 @@ class _HomeState extends State<FirebaseAuthDemo>{
   }
     });
   }
+
+  Future<void> scanBarcode() async {
+    String barcodeScanRes;
+    // Platform messages may fail, so we use a try/catch PlatformException.
+    try {
+      barcodeScanRes = await FlutterBarcodeScanner.scanBarcode(
+          "#ff6666", "Cancel", true, ScanMode.BARCODE);
+      setState(() {
+        itemCode = barcodeScanRes;
+      });
+      print(barcodeScanRes);
+    } on PlatformException {
+      barcodeScanRes = 'Failed to get platform version.';
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    // if(barcodeScanRes != "-1"){
+    //
+    //   _barcodeEditingController = barcodeScanRes;
+    // }
+  }
+
 }
