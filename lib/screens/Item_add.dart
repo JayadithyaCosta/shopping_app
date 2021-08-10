@@ -114,7 +114,6 @@ class _HomeState extends State<FirebaseAuthDemo>{
                     child: Text('SCAN', style: TextStyle( fontWeight: FontWeight.bold),),
                     onPressed: (){
                       setState(() {
-                        scanBarcode();
                         print(itemCode);
                         itemCode = _barcodeEditingController.text;
                       });
