@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shopping_app/main.dart';
 import 'package:shopping_app/screens/Cart.dart';
 import 'package:shopping_app/screens/Item_add.dart';
-import 'package:shopping_app/screens/actions.dart';
 import 'package:shopping_app/widget/button_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,8 +41,7 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
             children: [
               const DrawerHeader(
                 decoration: BoxDecoration(
-                    image: DecorationImage(image: NetworkImage(
-                        'https://cdn.dribbble.com/users/879147/screenshots/11116516/media/5c26ba9c6dde85a17f99dc89ddd08f84.png?compress=1&resize=400x300'),
+                    image: DecorationImage(image: AssetImage('images/header.png'),
                         fit: BoxFit.cover)
                 ),
                 child: Text(''),
@@ -54,7 +52,7 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Test()));
+                      MaterialPageRoute(builder: (context) => BarcodeScanPage()));
                 },
               ),
               ListTile(
@@ -67,6 +65,21 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
                         MaterialPageRoute(builder: (context) => Item()),
                       );
                     }
+                    else if(user!.email == "nalin.wijemanne@gmail.com"){
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Item()),
+                      );
+                    }
+                    else if(user!.email == "domain@gmail.com"){
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => Item()),
+                      );
+                    }
+
                     else {
                       const snackBar = SnackBar(
                           content: Text('Only Admins can access adding items!'));

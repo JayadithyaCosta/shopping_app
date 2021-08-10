@@ -16,7 +16,7 @@ class _SignUpState extends State<SignUp> {
   checkAuthentication() async {
     _auth.authStateChanges().listen((user) async {
       if (user != null) {
-        Navigator.pushReplacementNamed(context, "/test");
+        Navigator.pushReplacementNamed(context, "/scan");
       }
     });
   }
@@ -42,7 +42,7 @@ class _SignUpState extends State<SignUp> {
           // updateuser.displayName = _name;
           //  user.updateProfile(updateuser);
           await _auth.currentUser!.updateProfile(displayName: _name);
-          await Navigator.pushReplacementNamed(context,"/test") ;
+          await Navigator.pushReplacementNamed(context,"/scan") ;
 
         }
       } catch (e) {

@@ -111,7 +111,12 @@ class _HomeState extends State<FirebaseAuthDemo>{
                   width: 80,
                   height: 30,
                   child: RaisedButton(
-                    child: Text('SCAN', style: TextStyle( fontWeight: FontWeight.bold),),
+                    color: Colors.redAccent,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15)
+                    ),
+                    child: Text('SCAN', style: TextStyle( fontWeight: FontWeight.bold, color: Colors.white,),
+                    ),
                     onPressed: (){
                       setState(() {
                         print(itemCode);
