@@ -59,21 +59,7 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
                   title: const Text('Add Item'),
                   leading: Icon(Icons.input),
                   onTap: () {
-                    if (user!.email == "admin@gmail.com") {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Item()),
-                      );
-                    }
-                    else if(user!.email == "nalin.wijemanne@gmail.com"){
-
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => Item()),
-                      );
-                    }
-                    else if(user!.email == "domain@gmail.com"){
-
+                    if (user!.displayName == "admin") {
                       Navigator.push(
                         context,
                         MaterialPageRoute(builder: (context) => Item()),

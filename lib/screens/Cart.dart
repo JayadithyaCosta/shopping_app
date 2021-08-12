@@ -105,12 +105,12 @@ class _CartState extends State<Cart> {
                                       SizedBox(height: 5),
                                       Container(
                                         padding: EdgeInsets.all(1.0),
-                                        height: 80,
-                                        width: 100,
+                                        height: MediaQuery.of(context).size.height / 10,
+                                        width: MediaQuery.of(context).size.width / 8,
                                         decoration: BoxDecoration(
                                             color: Colors.grey,
                                             borderRadius:
-                                            BorderRadius.circular(16)),
+                                            BorderRadius.circular(5)),
                                         child: Image.network(products['img']),
                                       ),
                                     ],
@@ -119,7 +119,7 @@ class _CartState extends State<Cart> {
                                     products['name'],
                                     style: TextStyle(
                                       color: Colors.black,
-                                      fontSize: 20,
+                                      fontSize: 17,
                                     ),
                                   ),
                                   Text(
