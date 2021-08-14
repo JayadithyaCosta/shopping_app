@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
@@ -19,6 +21,7 @@ class BarcodeScanPage extends StatefulWidget {
 class _BarcodeScanPageState extends State<BarcodeScanPage> {
   String barcode = 'Unknown';
   final user = FirebaseAuth.instance.currentUser;
+
 
   Future<void> logOut() async {
     await FirebaseAuth.instance.signOut();
@@ -215,8 +218,6 @@ class ScanCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-
-
     final user = FirebaseAuth.instance.currentUser;
     String _userId = user!.uid;
 
@@ -304,7 +305,9 @@ class ScanCard extends StatelessWidget {
                   'price': products['price'],
                   'id': documentReference.id
                 }).then((result) {
-                  addToCartMessage(context);
+                  addToCartMessage(context).then((value) => {
+                    Navigator.pop(context)
+                  });
                 }).catchError((e) {
                   print(e);
                 });
@@ -317,11 +320,14 @@ class ScanCard extends StatelessWidget {
   }
 }
 
+
 Future<dynamic> addToCartMessage(BuildContext context) async {
   return showDialog(
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context){
+
+
         return AlertDialog(
           content: Text(
             'Added To Cart Successfully!',
@@ -338,7 +344,7 @@ Future<dynamic> addToCartMessage(BuildContext context) async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => BarcodeScanPage()),
-                );
+                  );
                 },
             ),
             FlatButton(
@@ -350,8 +356,11 @@ Future<dynamic> addToCartMessage(BuildContext context) async {
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => Cart()),
-                );
-                  },
+                  ).then((value) => {
+                    Navigator.pop(context)
+                });
+              },
+
             )
           ],
         );

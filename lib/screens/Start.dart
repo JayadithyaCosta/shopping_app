@@ -88,36 +88,36 @@ class _StartState extends State<Start> {
                     color: Colors.redAccent,
                   ),
 
-                  SizedBox(width:20.0),
-
-                  RaisedButton(
-
-                    padding: EdgeInsets.only(
-                        left: 30,
-                        right: 30
-                    ),
-
-                    onPressed: navigateToSignUp,
-                    child: Text('SIGN UP', style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white
-                    ),),
-
-                    shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10.0)
-                    ),
-                    color: Colors.cyan,
-                  ),
+                  // SizedBox(width:20.0),
+                  //
+                  // RaisedButton(
+                  //
+                  //   padding: EdgeInsets.only(
+                  //       left: 30,
+                  //       right: 30
+                  //   ),
+                  //
+                  //   onPressed: navigateToSignUp,
+                  //   child: Text('SIGN UP', style: TextStyle(
+                  //       fontSize: 20,
+                  //       fontWeight: FontWeight.bold,
+                  //       color: Colors.white
+                  //   ),),
+                  //
+                  //   shape: RoundedRectangleBorder(
+                  //       borderRadius: BorderRadius.circular(10.0)
+                  //   ),
+                  //   color: Colors.cyan,
+                  // ),
                 ],
               ),
               SizedBox(height: 10,),
 
-              SignInButton(
-                  Buttons.Google,
-                  text: "Sign Up with google",
-                  onPressed: () {}
-              ),
+              // SignInButton(
+              //     Buttons.Google,
+              //     text: "Sign Up with google",
+              //     onPressed: () {}
+              // ),
 
             ],
         ),
