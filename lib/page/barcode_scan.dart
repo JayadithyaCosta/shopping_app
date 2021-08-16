@@ -170,11 +170,24 @@ class _BarcodeScanPageState extends State<BarcodeScanPage> {
                     .where("barcode", isEqualTo: '$barcodeScanRes')
                     .snapshots(),
                 builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
+                  if(!snapshot.hasData){
+                    return Center(
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    );//or return a black container if you don't want to show anything while fetching data from firestore
+                  }
+                  else if (snapshot.data!.docs.isEmpty) {
                     return Dialog(
                       child: Container(
-                        height: 300,
-                        child: Text('Product Not Found'),
+                        height: 80,
+                        child: Text('Product Not Found', textAlign: TextAlign.center, style: TextStyle(
+                          fontSize: 30,
+                          fontFamily: 'STIX Two Text',
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87
+                        ),
+                        ),
                       ),
                     );
                   } else {
@@ -222,11 +235,6 @@ class ScanCard extends StatelessWidget {
     String _userId = user!.uid;
 
 
-    // FirebaseAuth.instance.currentUser().then((user) {
-    //   _userId = user.uid;
-    // });
-
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
@@ -235,7 +243,7 @@ class ScanCard extends StatelessWidget {
           height: 180,
           width: 160,
           decoration: BoxDecoration(
-              color: Color(0xFF3D82AE),
+              color: Colors.blueAccent,
               borderRadius: BorderRadius.circular(16)),
           child: Image.network(products['img']),
         ),
@@ -244,7 +252,7 @@ class ScanCard extends StatelessWidget {
           child: Text(
             products['name'],
             style: TextStyle(
-              color: Color(0xFF535353),
+              color: Colors.blueGrey,
               fontSize: 18,
             ),
           ),
@@ -285,7 +293,7 @@ class ScanCard extends StatelessWidget {
             child: RaisedButton(
               shape: RoundedRectangleBorder(
                   borderRadius: new BorderRadius.circular(30.0)),
-              color: Color(0xFFE8284F),
+              color: Colors.red,
               child: Text(
                 "Add to cart",
                 style: TextStyle(color: Colors.white),
